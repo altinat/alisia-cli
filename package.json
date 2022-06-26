@@ -2,9 +2,10 @@
   "name": "alisia",
   "version": "0.0.1",
   "description": "AL is in automatic",
-  "main": "app/app.js",
+  "main": "app.js",
+  "type": "module",
   "scripts": {
-    "test": "node app/app.js"
+    "start": "node --require @nextools/suppress-experimental-warnings --experimental-import-meta-resolve --experimental-loader @nextools/typescript-esm-loader ./app.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,10 @@
   },
   "homepage": "https://github.com/altinat/alisia#readme",
   "dependencies": {
-    "readline": "^1.3.0"
+    "@inquirer/input": "^0.0.21-alpha.0",
+    "@nextools/suppress-experimental-warnings": "^0.1.0",
+    "@nextools/typescript-esm-loader": "^0.1.1",
+    "inquirer": "^9.0.0",
+    "ora": "^6.1.1"
   }
 }
