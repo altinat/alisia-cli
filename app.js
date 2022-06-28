@@ -6,15 +6,23 @@ import input from '@inquirer/input';
 import inquirer from 'inquirer';
 import fetch from 'node-fetch';
 
-//อาจเปลี่ยนเป็น urql
-const login_token = `
-    header: {
-        authority: 'api.bilibili.tv',
-        origin: 'https://www.bilibili.tv',
-        cookie: 'SESSDATA=07221ff2%2C1671857522%2Ccb3d8%2A61',
-        useragent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36',
-    }
-`;
+const login_token = {
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "th-TH,th;q=0.9",
+    "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-site",
+    "cookie": "bstar-web-lang=th; buvid3=a163c1b0-beae-4356-a2d8-f788f195fedd33048infoc; DedeUserID=2094190466; DedeUserID__ckMd5=080006ae2c69fc7f; SESSDATA=07221ff2%2C1671857522%2Ccb3d8%2A61; bili_jct=bb77b42c84d3b168e841de5dcbf0bf8a; sid=juzdm4kn",
+    "Referer": "https://www.bilibili.tv/th",
+    "Referrer-Policy": "no-referrer-when-downgrade"
+  },
+  "body": null,
+  "method": "GET"
+};
 
 //ask link and generate ids
 const url = await input({
