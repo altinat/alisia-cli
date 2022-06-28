@@ -26,11 +26,12 @@ const login_token = {
 
 //ask link and generate ids
 var url = await input({
-    message: 'Enter link to generate ids'
+    message: 'Enter Bilibili.tv link:',
 });
-//set link to url if not set
+//if not set
 if (!url) {
-    url = 'https://www.bilibili.tv/th/play/1050808/11275804';
+    console.log('No link entered');
+    process.exit();
 }
 var pathname = new URL(url).pathname;
 if (pathname.indexOf('/th/play/') > -1) {
