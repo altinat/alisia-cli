@@ -7,27 +7,31 @@ import inquirer from 'inquirer';
 import fetch from 'node-fetch';
 
 const login_token = {
-  "headers": {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "th-TH,th;q=0.9",
-    "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "same-site",
-    "cookie": "bstar-web-lang=th; buvid3=a163c1b0-beae-4356-a2d8-f788f195fedd33048infoc; DedeUserID=2094190466; DedeUserID__ckMd5=080006ae2c69fc7f; SESSDATA=07221ff2%2C1671857522%2Ccb3d8%2A61; bili_jct=bb77b42c84d3b168e841de5dcbf0bf8a; sid=juzdm4kn",
-    "Referer": "https://www.bilibili.tv/th",
-    "Referrer-Policy": "no-referrer-when-downgrade"
-  },
-  "body": null,
-  "method": "GET"
+    "headers": {
+        "accept": "application/json, text/plain, */*",
+        "accept-language": "th-TH,th;q=0.9",
+        "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-site",
+        "cookie": "bstar-web-lang=th; buvid3=a163c1b0-beae-4356-a2d8-f788f195fedd33048infoc; DedeUserID=2094190466; DedeUserID__ckMd5=080006ae2c69fc7f; SESSDATA=07221ff2%2C1671857522%2Ccb3d8%2A61; bili_jct=bb77b42c84d3b168e841de5dcbf0bf8a; sid=juzdm4kn",
+        "Referer": "https://www.bilibili.tv/th",
+        "Referrer-Policy": "no-referrer-when-downgrade"
+    },
+    "body": null,
+    "method": "GET"
 };
 
 //ask link and generate ids
-const url = await input({
+var url = await input({
     message: 'Enter link to generate ids'
 });
+//set link to url if not set
+if (!url) {
+    url = 'https://www.bilibili.tv/th/play/1050808/11275804';
+}
 var pathname = new URL(url).pathname;
 if (pathname.indexOf('/th/play/') > -1) {
     var seasonid = pathname.split('/')[3];
@@ -38,15 +42,19 @@ inquirer.prompt([{
     type: 'list',
     name: 'imode',
     message: 'Select mode',
-    choices: ['Seasons','Episodes']
+    choices: ['Seasons', 'Episodes'],
+    default: 'Seasons'
 }]).then(({
     imode
 }) => {
     if (imode === 'Seasons') {
-        const spinner = ora('Load Series json files...').start();
+        const spinner = ora('Loading...').start();
+        if (!fs.existsSync('./tmp/')) {
+            fs.mkdirSync('./tmp/');
+        }
         //seasonurl
         var seasonurl = 'https://api.bilibili.tv/intl/gateway/web/v2/ogv/play/episodes?platform=web?s_locale=th_TH&season_id=' + seasonid;
-        var seasontd = 'C:/AL/tmp/' + seasonid + '/';
+        var seasontd = './tmp/' + seasonid + '/';
         //fetch url data
         fetch(seasonurl).then(function (response) {
             return response.json();
@@ -63,6 +71,7 @@ inquirer.prompt([{
                             fs.mkdirSync(seasontd);
                         }
                         fs.writeFileSync(seasontd + d[i].episode_id + '.json', JSON.stringify(data));
+                        spinner.succeed('Saved ' + d[i].title_display);
                         //get subtitle files
                         fetch('https://api.bilibili.tv/intl/gateway/m/subtitle?ep_id=' + d[i].episode_id, login_token).then(function (response) {
                             return response.json();
@@ -71,8 +80,8 @@ inquirer.prompt([{
                         });
                     });
             }
+            spinner.succeed('Loaded');
         });
-        spinner.succeed();
     } else if (imode === 'Episodes') {
         console.log('episodes');
     } else {
