@@ -20,6 +20,7 @@
   "homepage": "https://github.com/altinat/alisia#readme",
   "dependencies": {
     "@inquirer/input": "^0.0.21-alpha.0",
+    "dotenv": "^16.0.1",
     "inquirer": "^9.0.0",
     "node-fetch": "^3.2.6",
     "ora": "^6.1.1"
