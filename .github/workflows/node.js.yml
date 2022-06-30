@@ -9,8 +9,25 @@ on:
   pull_request:
     branches: [ "main" ]
 env:
-  TESTURL: https://www.bilibili.tv/th/play/1050596/11266419
-  COOKIES: {"headers": {"accept": "application/json, text/plain, */*","accept-language": "th-TH,th;q=0.9","sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"","sec-ch-ua-mobile": "?0","sec-ch-ua-platform": "\"Windows\"","sec-fetch-dest": "empty","sec-fetch-mode": "cors","sec-fetch-site": "same-site","cookie": "bstar-web-lang=th; buvid3=a163c1b0-beae-4356-a2d8-f788f195fedd33048infoc; DedeUserID=2094190466; DedeUserID__ckMd5=080006ae2c69fc7f; SESSDATA=07221ff2%2C1671857522%2Ccb3d8%2A61; bili_jct=bb77b42c84d3b168e841de5dcbf0bf8a; sid=juzdm4kn","Referer": "https://www.bilibili.tv/th","Referrer-Policy": "no-referrer-when-downgrade"},"body": null,"method": "GET"}
+  TESTURL: "https://www.bilibili.tv/th/play/1050596/11266419"
+  COOKIES: >-
+    {
+      "headers": {
+          "accept": "application/json, text/plain, */*",
+          "accept-language": "th-TH,th;q=0.9",
+          "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "same-site",
+          "cookie": "bstar-web-lang=th; buvid3=a163c1b0-beae-4356-a2d8-f788f195fedd33048infoc; DedeUserID=2094190466; DedeUserID__ckMd5=080006ae2c69fc7f; SESSDATA=07221ff2%2C1671857522%2Ccb3d8%2A61; bili_jct=bb77b42c84d3b168e841de5dcbf0bf8a; sid=juzdm4kn",
+          "Referer": "https://www.bilibili.tv/th",
+          "Referrer-Policy": "no-referrer-when-downgrade"
+      },
+      "body": null,
+      "method": "GET"
+    }
 
 jobs:
   build:
