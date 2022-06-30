@@ -3,6 +3,9 @@
 import fs from 'fs';
 import ora from 'ora';
 import fetch from 'node-fetch';
+import {
+    splitUrl
+} from './worker.js';
 
 const login_token = {
     "headers": {
@@ -24,50 +27,43 @@ const login_token = {
 
 //ask link and generate ids
 var url = 'https://www.bilibili.tv/th/play/1050808/11275804'
-var pathname = new URL(url).pathname;
-if (pathname.indexOf('/th/play/') > -1) {
-    var seasonid = pathname.split('/')[3];
-    var epid = pathname.split('/')[4];
-} // else { var seasonid = pathname.split('/')[3]; }
 
-const imode = 'Seasons';
-if (imode === 'Seasons') {
-    const spinner = ora('Loading...').start();
-    if (!fs.existsSync('./tmp/')) {
-        fs.mkdirSync('./tmp/');
-    }
-    //seasonurl
-    var seasonurl = 'https://api.bilibili.tv/intl/gateway/web/v2/ogv/play/episodes?platform=web?s_locale=th_TH&season_id=' + seasonid;
-    var seasontd = './tmp/' + seasonid + '/';
-    //fetch url data
-    fetch(seasonurl).then(function (response) {
-        return response.json();
-    }).then(function (data) {
-        const d = data.data.sections[0].episodes;
-        //loop data and output episode_id
-        for (let i = 0; i < d.length; i++) {
-            //get playurl files
-            fetch('https://api.bilibili.tv/intl/gateway/web/playurl?device=wap&platform=web&qn=64&tf=0&type=0&ep_id=' + d[i].episode_id, login_token)
-                .then(function (response) {
+let {
+    seasonid,
+    epid
+} = splitUrl(url);
+console.log(`seasonid: ${seasonid} epid: ${epid}`);
+const spinner = ora('Loading...').start();
+if (!fs.existsSync('./tmp/')) {
+    fs.mkdirSync('./tmp/');
+}
+//seasonurl
+var seasonurl = 'https://api.bilibili.tv/intl/gateway/web/v2/ogv/play/episodes?platform=web?s_locale=th_TH&season_id=' + seasonid;
+var seasontd = './tmp/' + seasonid + '/';
+//fetch url data
+fetch(seasonurl).then(function (response) {
+    return response.json();
+}).then(function (data) {
+    const d = data.data.sections[0].episodes;
+    //loop data and output episode_id
+    for (let i = 0; i < d.length; i++) {
+        //get playurl files
+        fetch('https://api.bilibili.tv/intl/gateway/web/playurl?device=wap&platform=web&qn=64&tf=0&type=0&ep_id=' + d[i].episode_id, login_token)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                if (!fs.existsSync(seasontd)) {
+                    fs.mkdirSync(seasontd);
+                }
+                fs.writeFileSync(seasontd + d[i].episode_id + '.json', JSON.stringify(data));
+                spinner.succeed('Saved ' + d[i].title_display);
+                //get subtitle files
+                fetch('https://api.bilibili.tv/intl/gateway/m/subtitle?ep_id=' + d[i].episode_id, login_token).then(function (response) {
                     return response.json();
                 }).then(function (data) {
-                    if (!fs.existsSync(seasontd)) {
-                        fs.mkdirSync(seasontd);
-                    }
-                    fs.writeFileSync(seasontd + d[i].episode_id + '.json', JSON.stringify(data));
-                    spinner.succeed('Saved ' + d[i].title_display);
-                    //get subtitle files
-                    fetch('https://api.bilibili.tv/intl/gateway/m/subtitle?ep_id=' + d[i].episode_id, login_token).then(function (response) {
-                        return response.json();
-                    }).then(function (data) {
-                        fs.writeFileSync(seasontd + d[i].episode_id + '-sub' + '.json', JSON.stringify(data));
-                    });
+                    fs.writeFileSync(seasontd + d[i].episode_id + '-sub' + '.json', JSON.stringify(data));
                 });
-        }
-        spinner.succeed('Loaded');
-    });
-} else if (imode === 'Episodes') {
-    console.log('episodes');
-} else {
-    console.log('error');
-};
+            });
+    }
+    spinner.succeed('Loaded');
+});

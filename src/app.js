@@ -1,10 +1,9 @@
-#!/usr/bin/env node --no-warnings
-
 import fs from 'fs';
 import ora from 'ora';
 import input from '@inquirer/input';
 import inquirer from 'inquirer';
 import fetch from 'node-fetch';
+import { splitUrl } from './worker.js';
 
 const login_token = {
     "headers": {
@@ -25,7 +24,7 @@ const login_token = {
 };
 
 //ask link and generate ids
-var url = await input({
+let url = await input({
     message: 'Enter Bilibili.tv link:',
 });
 //if not set
@@ -33,11 +32,11 @@ if (!url) {
     console.log('No link entered');
     process.exit();
 }
-var pathname = new URL(url).pathname;
-if (pathname.indexOf('/th/play/') > -1) {
-    var seasonid = pathname.split('/')[3];
-    var epid = pathname.split('/')[4];
-} // else { var seasonid = pathname.split('/')[3]; }
+
+let {
+    seasonid,
+    epid
+} = splitUrl(url);
 
 inquirer.prompt([{
     type: 'list',
