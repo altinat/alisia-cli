@@ -5,8 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node ./src/app.js",
-    "test": "node ./src/test.js"
+    "start": "node ./src/app.js"
   },
   "repository": {
     "type": "git",
@@ -21,8 +20,10 @@
   "dependencies": {
     "@inquirer/input": "^0.0.21-alpha.0",
     "dotenv": "^16.0.1",
+    "download": "^8.0.0",
+    "http": "^0.0.1-security",
     "inquirer": "^9.0.0",
     "node-fetch": "^3.2.6",
-    "ora": "^6.1.1"
+    "ora": "^6.1.2"
   }
 }

@@ -38,14 +38,14 @@ inquirer.prompt([{
     if (imode === 'Seasons') {
         const spinner = ora('Loading...').start();
         if (!fs.existsSync('./tmp/')) {
-            fs.mkdirSync('./tmp/');
+            fs.mkdirSync('./tmp/')
         }
         //seasonurl
         var seasonurl = 'https://api.bilibili.tv/intl/gateway/web/v2/ogv/play/episodes?platform=web?s_locale=th_TH&season_id=' + seasonid;
         var seasontd = './tmp/' + seasonid + '/';
         //fetch url data
-        fetchseasonurl(seasonurl, seasontd, login_token)
-        spinner.succeed('Loaded')
+        fetchseasonurl(seasonurl, seasontd)
+        spinner.stop();
     } else if (imode === 'Episodes') {
         console.log('episodes');
     } else {
