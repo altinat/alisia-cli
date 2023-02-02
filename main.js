@@ -78,7 +78,7 @@ fs.readFile(jsonFile, (err, data) => {
                     spinner.start(`Downloading ${fileName}... ${total.percentage.toFixed(2)}% (${bytesToSize(total.speed)}/s)`);
                 })
                 .on("end", () => {
-                    spinner.succeed("Download completed!");
+                    spinner.succeed(`Downloaded ${fileName}`);
                     resolve();
                 }).start().setMaxListeners(10);
         });
@@ -121,7 +121,7 @@ fs.readFile(jsonFile, (err, data) => {
     (async () => {
         try {
             await mergeFiles();
-            spinner.succeed('finish');
+            spinner.succeed('Done');
         } catch (error) {
             spinner.fail(error);
         }
