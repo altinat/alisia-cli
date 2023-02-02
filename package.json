@@ -1,11 +1,11 @@
 {
   "name": "alisia",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "AL is in automatic",
-  "main": "app.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "node ./src/app.js"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/altinat/alisia#readme",
   "dependencies": {
-    "@inquirer/input": "^0.0.22-alpha.0",
-    "dotenv": "^16.0.1",
-    "download": "^8.0.0",
-    "inquirer": "^9.0.2",
-    "node-fetch": "^3.2.10",
-    "ora": "^6.1.2"
+    "child_process": "^1.0.2",
+    "easydl": "^1.0.3",
+    "fs": "^0.0.1-security",
+    "ora": "^6.1.2",
+    "path": "^0.12.7",
+    "yargs": "^17.6.2"
   }
 }
